@@ -1,6 +1,6 @@
 <template>
   <el-container class="default-container">
-    <el-header class="header" height="45px">Header</el-header>
+    <el-header class="header" height="45px">Less</el-header>
     <el-container class="main-container">
       <el-aside class="aside" :width="collapse ? '65px' : '200px'">
         <el-menu
@@ -11,32 +11,13 @@
           :router="true"
           active-text-color="#ffd04b"
         >
-          <el-submenu index="1">
-            <template slot="title">
-              <i class="el-icon-location"></i>
-              <span>导航一</span>
-            </template>
-            <el-menu-item-group>
-              <template slot="title"
-                >分组一</template
-              >
-              <el-menu-item index="1-1">选项1</el-menu-item>
-              <el-menu-item index="1-2">选项2</el-menu-item>
-            </el-menu-item-group>
-            <el-menu-item-group title="分组2">
-              <el-menu-item index="1-3">选项3</el-menu-item>
-            </el-menu-item-group>
-            <el-submenu index="1-4">
-              <template slot="title"
-                >选项4</template
-              >
-              <el-menu-item index="1-4-1">选项1</el-menu-item>
-            </el-submenu>
-          </el-submenu>
-          <el-menu-item index="2">
-            <i class="el-icon-menu"></i>
-            <span slot="title">导航二</span>
+          <el-menu-item index="0-0" :route="{ path: '/' }">
+            <i class="el-icon-s-grid"></i>
+            <span slot="title">首页</span>
           </el-menu-item>
+          <template v-for="menu in menus">
+            <sub-menu :key="menu.menuId" :menu="menu"></sub-menu>
+          </template>
         </el-menu>
         <div class="aside-bottom">
           <hamburger :is-active="collapse" @toggle="toggle"></hamburger>
@@ -49,12 +30,18 @@
 
 <script>
 import Hamburger from '@/components/hamburger/Hamburger'
+import SubMenu from '@/components/menu/SubMenu'
 export default {
   name: 'Default',
-  components: { Hamburger },
+  components: { Hamburger, SubMenu },
+  async created() {
+    await this.$store.dispatch('system/menus')
+    this.menus = this.$store.state.system.menus
+  },
   data() {
     return {
-      collapse: false
+      collapse: false,
+      menus: []
     }
   },
   methods: {
@@ -70,6 +57,9 @@ export default {
 .main-container {
   height: 100%;
 }
+.main-container {
+  background: #eceff1;
+}
 .header {
   line-height: 45px;
 }
@@ -78,6 +68,8 @@ export default {
   position: relative;
   height: 100%;
   padding-bottom: 40px;
+  width: 200px;
+  transition: 0.38s;
 }
 .main {
   height: 100%;
@@ -89,7 +81,6 @@ export default {
   width: 100%;
 }
 </style>
-
 <style>
 html,
 body,
@@ -97,5 +88,10 @@ body,
 #__layout {
   height: 100%;
   width: 100%;
+}
+.default-container .el-menu {
+  border: 0;
+  height: 100%;
+  overflow: auto;
 }
 </style>

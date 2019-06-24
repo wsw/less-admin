@@ -24,6 +24,6 @@ export const actions = {
     data && commit('setToken', data.token)
   },
   async hello() {
-    await request.get('/hello')
+    await request.get('/sys/hello')
   }
 }

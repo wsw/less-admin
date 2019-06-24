@@ -58,6 +58,7 @@ export default {
   },
   proxy: {
     '/hello': 'http://localhost:3000/',
-    '/auth': 'http://localhost:3000/'
+    '/auth': 'http://localhost:3000/',
+    '/sys': 'http://localhost:3000/'
   }
 }
