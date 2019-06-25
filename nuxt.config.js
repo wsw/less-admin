@@ -57,8 +57,11 @@ export default {
     host: '0.0.0.0' // default: localhost,
   },
   proxy: {
-    '/hello': 'http://localhost:3000/',
-    '/auth': 'http://localhost:3000/',
-    '/sys': 'http://localhost:3000/'
+    // '/hello': 'http://localhost:3000/',
+    // '/auth': 'http://localhost:3000/',
+    '/api/': {
+      target: 'http://localhost:3000/',
+      pathRewrite: { '^/api': '/' }
+    }
   }
 }

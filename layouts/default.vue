@@ -1,6 +1,6 @@
 <template>
   <el-container class="default-container">
-    <el-header class="header" height="45px">Less</el-header>
+    <el-header class="header" height="45px">Less快速开发框架</el-header>
     <el-container class="main-container">
       <el-aside class="aside" :width="collapse ? '65px' : '200px'">
         <el-menu
@@ -93,5 +93,9 @@ body,
   border: 0;
   height: 100%;
   overflow: auto;
+}
+.default-container .box-card {
+  height: 100%;
+  border: 0;
 }
 </style>

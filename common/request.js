@@ -2,7 +2,7 @@ import axios from 'axios'
 import { Message } from 'element-ui'
 
 const service = axios.create({
-  baseURL: process.env.baseUrl,
+  baseURL: process.env.baseUrl || '/api',
   timeout: 500000,
   withCredentials: true,
   headers: {

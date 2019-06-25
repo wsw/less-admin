@@ -1,5 +1,8 @@
 <template>
-  <el-submenu v-if="menu.child.length > 0" :index="menu.menuId + ''">
+  <el-submenu
+    v-if="menu.child && menu.child.length > 0"
+    :index="menu.menuId + ''"
+  >
     <template slot="title">
       <i v-if="menu.icon" :class="'el-icon-' + menu.icon"></i>
       <span>{{ menu.name }}</span>

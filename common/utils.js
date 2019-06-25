@@ -4,12 +4,30 @@ export const getUUID = () => {
   })
 }
 
+// 目录跟菜单
 export const menusToTree = (menus, root = 0) => {
   const tree = []
   menus.map(menu => {
+    if (menu.parentId === root && menu.type < 2) {
+      const child = menusToTree(menus, menu.menuId)
+      if (child && child.length > 0) {
+        menu.child = child
+      }
+      tree.push({ ...menu })
+    }
+  })
+  return tree
+}
+// 目录跟菜单跟按钮
+export const menusToTreeAll = (menus, root = 0) => {
+  const tree = []
+  menus.map(menu => {
     if (menu.parentId === root) {
-      menu.child = menusToTree(menus, menu.menuId)
-      tree.push(menu)
+      const child = menusToTreeAll(menus, menu.menuId)
+      if (child && child.length > 0) {
+        menu.child = child
+      }
+      tree.push({ ...menu })
     }
   })
   return tree

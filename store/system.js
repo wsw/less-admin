@@ -1,13 +1,15 @@
 import request from '@/common/request'
-import { menusToTree } from '@/common/utils'
+import { menusToTree, menusToTreeAll } from '@/common/utils'
 
 export const state = () => ({
-  menus: []
+  menus: [],
+  allMenus: []
 })
 
 export const mutations = {
   setMenus(state, menus) {
     state.menus = menusToTree(menus)
+    state.allMenus = menusToTreeAll(menus)
   }
 }
 
