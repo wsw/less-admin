@@ -1,10 +1,7 @@
 <template>
   <el-card class="box-card">
-    <div slot="header" class="clearfix">
-      <span>卡片名称</span>
-      <el-button style="float: right; padding: 3px 0" type="text"
-        >操作按钮</el-button
-      >
+    <div slot="header">
+      <el-button type="primary" @click="add">新增</el-button>
     </div>
     <el-table
       :data="menus"
@@ -13,17 +10,44 @@
       border
       :tree-props="{ children: 'child' }"
     >
-      <el-table-column prop="name" label="名称" width="180"> </el-table-column>
-      <el-table-column align="center" prop="type" label="类型" width="180">
+      <el-table-column prop="name" label="名称" width="200"> </el-table-column>
+      <el-table-column align="center" width="100" prop="type" label="类型">
         <template slot-scope="scope">
-          {{
-            scope.row.type == 0 ? '目录' : scope.row.type == 1 ? '菜单' : '按钮'
-          }}
+          <el-tag size="small" :type="scope.row.typeTag">{{
+            scope.row.typeName
+          }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="icon" label="图标">
+      <el-table-column align="center" width="100" prop="icon" label="图标">
+        <template slot-scope="scope">
+          <icon-svg v-if="scope.row.icon" :name="scope.row.icon"></icon-svg>
+        </template>
       </el-table-column>
-      <el-table-column align="center" prop="url" label="地址">
+      <el-table-column
+        show-overflow-tooltip
+        align="center"
+        prop="url"
+        label="地址"
+      >
+      </el-table-column>
+      <el-table-column
+        show-overflow-tooltip
+        align="center"
+        prop="perms"
+        label="权限标识"
+      >
+      </el-table-column>
+      <el-table-column align="center" prop="orderNum" width="100" label="排序">
+      </el-table-column>
+      <el-table-column align="center" label="操作">
+        <template slot-scope="scope">
+          <el-button size="small" type="text" @click="modify(scope.row)">
+            修改
+          </el-button>
+          <el-button size="small" type="text" @click="del(scope.row)">
+            删除
+          </el-button>
+        </template>
       </el-table-column>
     </el-table>
   </el-card>
@@ -35,6 +59,11 @@ export default {
     menus() {
       return this.$store.state.system.allMenus
     }
+  },
+  methods: {
+    modify(row) {},
+    del(row) {},
+    add() {}
   }
 }
 </script>

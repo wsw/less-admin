@@ -1,3 +1,5 @@
+import { resolve } from 'path'
+
 export default {
   mode: 'spa',
   /*
@@ -27,7 +29,7 @@ export default {
   /*
    ** Plugins to load before mounting the App
    */
-  plugins: ['@/plugins/element-ui'],
+  plugins: ['@/plugins/element-ui', '@/plugins/icon-svg'],
   /*
    ** Nuxt.js modules
    */
@@ -50,7 +52,20 @@ export default {
     /*
      ** You can extend webpack config here
      */
-    extend(config, ctx) {}
+    extend(config, ctx) {
+      const svgRule = config.module.rules.find(rule => rule.test.test('.svg'))
+      svgRule.exclude = [resolve(__dirname, 'components/icon-svg/svg')]
+
+      // Includes svg for svg-sprite-loader
+      config.module.rules.push({
+        test: /\.svg$/,
+        include: [resolve(__dirname, 'components/icon-svg/svg')],
+        loader: 'svg-sprite-loader',
+        options: {
+          symbolId: '[name]'
+        }
+      })
+    }
   },
   server: {
     port: 3008, // default: 3000

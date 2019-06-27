@@ -6,12 +6,13 @@
         <el-menu
           :collapse="collapse"
           :collapse-transition="false"
-          background-color="#545c64"
-          text-color="#fff"
+          background-color="#202b30"
+          text-color="#8a979e"
           :router="true"
-          active-text-color="#ffd04b"
+          active-text-color="white"
+          :default-active="defaultIndex"
         >
-          <el-menu-item index="0-0" :route="{ path: '/' }">
+          <el-menu-item index="" :route="{ path: '/' }">
             <i class="el-icon-s-grid"></i>
             <span slot="title">首页</span>
           </el-menu-item>
@@ -31,6 +32,8 @@
 <script>
 import Hamburger from '@/components/hamburger/Hamburger'
 import SubMenu from '@/components/menu/SubMenu'
+import '@/components/icon-svg/svg/icon-menu.svg'
+
 export default {
   name: 'Default',
   components: { Hamburger, SubMenu },
@@ -39,9 +42,14 @@ export default {
     this.menus = this.$store.state.system.menus
   },
   data() {
+    const route = this.$route
     return {
       collapse: false,
-      menus: []
+      menus: [],
+      defaultIndex:
+        route.path === '/frame/'
+          ? `${route.path}?url=${route.query.url}`
+          : route.path
     }
   },
   methods: {
@@ -64,12 +72,12 @@ export default {
   line-height: 45px;
 }
 .aside {
-  background: #545c64;
+  background: #202b30;
   position: relative;
   height: 100%;
   padding-bottom: 40px;
   width: 200px;
-  transition: 0.38s;
+  transition: 0.5s;
 }
 .main {
   height: 100%;
@@ -97,5 +105,6 @@ body,
 .default-container .box-card {
   height: 100%;
   border: 0;
+  overflow: auto;
 }
 </style>

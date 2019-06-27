@@ -19,6 +19,11 @@ export const menusToTree = (menus, root = 0) => {
   return tree
 }
 // 目录跟菜单跟按钮
+const MENU_TYPE = [
+  { typeName: '目录', typeTag: 'primary' },
+  { typeName: '菜单', typeTag: 'success' },
+  { typeName: '按钮', typeTag: 'info' }
+]
 export const menusToTreeAll = (menus, root = 0) => {
   const tree = []
   menus.map(menu => {
@@ -27,7 +32,7 @@ export const menusToTreeAll = (menus, root = 0) => {
       if (child && child.length > 0) {
         menu.child = child
       }
-      tree.push({ ...menu })
+      tree.push({ ...menu, ...MENU_TYPE[menu.type] })
     }
   })
   return tree
