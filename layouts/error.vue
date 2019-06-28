@@ -16,20 +16,25 @@
 
 <script>
 export default {
-  props: ['error'],
-  layout: 'blank' // 你可以为错误页面指定自定义的布局
+  props: {
+    error: {
+      type: Object,
+      default: () => {}
+    }
+  }
+  // layout: 'blank' // 你可以为错误页面指定自定义的布局
 }
 </script>
 
 <style scoped>
-.error-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-}
+/*.error-container {*/
+/*  position: absolute;*/
+/*  top: 0;*/
+/*  right: 0;*/
+/*  bottom: 0;*/
+/*  left: 0;*/
+/*  overflow: hidden;*/
+/*}*/
 .error-container .error-container-wrapper {
   padding: 0;
   margin: 0;

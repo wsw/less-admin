@@ -1,6 +1,16 @@
 <template>
   <el-container class="default-container">
-    <el-header class="header" height="45px">Less快速开发框架</el-header>
+    <el-header class="header" height="45px">
+      Less快速开发框架
+      <el-dropdown class="user-info" @command="handleUserCommand">
+        <span class="el-dropdown-link">
+          {{ user.username }}<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="logout">登出</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+    </el-header>
     <el-container class="main-container">
       <el-aside class="aside" :width="collapse ? '65px' : '200px'">
         <el-menu
@@ -32,29 +42,42 @@
 <script>
 import Hamburger from '@/components/hamburger/Hamburger'
 import SubMenu from '@/components/menu/SubMenu'
-import '@/components/icon-svg/svg/icon-menu.svg'
 
 export default {
   name: 'Default',
   components: { Hamburger, SubMenu },
-  async created() {
-    await this.$store.dispatch('system/menus')
-    this.menus = this.$store.state.system.menus
-  },
   data() {
     const route = this.$route
     return {
       collapse: false,
-      menus: [],
       defaultIndex:
         route.path === '/frame/'
           ? `${route.path}?url=${route.query.url}`
           : route.path
     }
   },
+  computed: {
+    menus() {
+      return this.$store.state.menus
+    },
+    user() {
+      return this.$store.state.user
+    }
+  },
+  async created() {
+    await this.$store.dispatch('currentUser')
+    await this.$store.dispatch('menus')
+  },
   methods: {
     toggle() {
       this.collapse = !this.collapse
+    },
+    handleUserCommand(command) {
+      if (command === 'logout') {
+        this.$store.dispatch('logout').then(() => {
+          this.$router.push('/login')
+        })
+      }
     }
   }
 }
@@ -87,6 +110,16 @@ export default {
   position: absolute;
   bottom: 5px;
   width: 100%;
+}
+.user-info {
+  float: right;
+}
+.el-dropdown-link {
+  cursor: pointer;
+  color: #409eff;
+}
+.el-icon-arrow-down {
+  font-size: 12px;
 }
 </style>
 <style>

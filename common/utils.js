@@ -10,13 +10,14 @@ export const menusToTree = (menus, root = 0) => {
   menus.map(menu => {
     if (menu.parentId === root && menu.type < 2) {
       const child = menusToTree(menus, menu.menuId)
+      const temp = { ...menu }
       if (child && child.length > 0) {
-        menu.child = child
+        temp.child = child
       }
-      tree.push({ ...menu })
+      tree.push(temp)
     }
   })
-  return tree
+  return [...tree]
 }
 // 目录跟菜单跟按钮
 const MENU_TYPE = [
@@ -29,11 +30,12 @@ export const menusToTreeAll = (menus, root = 0) => {
   menus.map(menu => {
     if (menu.parentId === root) {
       const child = menusToTreeAll(menus, menu.menuId)
+      const temp = { ...menu }
       if (child && child.length > 0) {
-        menu.child = child
+        temp.child = child
       }
-      tree.push({ ...menu, ...MENU_TYPE[menu.type] })
+      tree.push({ ...temp, ...MENU_TYPE[menu.type] })
     }
   })
-  return tree
+  return [...tree]
 }
