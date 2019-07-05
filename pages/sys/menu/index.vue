@@ -91,7 +91,18 @@
           <el-input v-model="form.perms" placeholder="权限标识"></el-input>
         </el-form-item>
         <el-form-item v-show="form.type !== 2" label="图标">
-          <el-input v-model="form.icon" placeholder="菜单图标"></el-input>
+          <el-select filterable v-model="form.icon" placeholder="菜单图标">
+            <el-option
+              v-for="item in iconList"
+              :key="item"
+              :label="item"
+              :value="item"
+            >
+              <span style="float: right">{{ item }}</span>
+              <icon-svg :name="item"></icon-svg>
+            </el-option>
+          </el-select>
+          <!--          <el-input v-model="form.icon" placeholder="菜单图标"></el-input>-->
         </el-form-item>
         <el-form-item v-show="form.type !== 2" label="排序号">
           <el-input v-model="form.orderNum"></el-input>
@@ -141,6 +152,9 @@ export default {
     },
     menus() {
       return menusToTreeAll([...this.$store.state.system.menus])
+    },
+    iconList() {
+      return this.icons
     }
   },
   async fetch({ store }) {

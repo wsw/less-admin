@@ -140,4 +140,8 @@ body,
   border: 0;
   overflow: auto;
 }
+.el-table td,
+.el-table th {
+  text-align: center;
+}
 </style>

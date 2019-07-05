@@ -67,4 +67,9 @@ export default {
 .links {
   padding-top: 15px;
 }
+
+.el-table td,
+.el-table th {
+  text-align: center;
+}
 </style>
