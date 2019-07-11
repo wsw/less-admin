@@ -144,4 +144,7 @@ body,
 .el-table th {
   text-align: center;
 }
+.el-table td.text-left {
+  text-align: left;
+}
 </style>

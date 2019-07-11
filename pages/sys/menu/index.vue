@@ -10,7 +10,13 @@
       border
       :tree-props="{ children: 'child' }"
     >
-      <el-table-column prop="name" label="名称" width="200"> </el-table-column>
+      <el-table-column
+        class-name="text-left"
+        prop="name"
+        label="名称"
+        width="200"
+      >
+      </el-table-column>
       <el-table-column align="center" width="100" prop="type" label="类型">
         <template slot-scope="scope">
           <el-tag size="small" :type="scope.row.typeTag">{{
