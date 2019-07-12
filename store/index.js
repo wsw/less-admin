@@ -19,6 +19,11 @@ export const mutations = {
     sessionStorage.setItem('token', token)
     request.defaults.headers.common.Authorization = 'Bearer ' + token
   },
+  setLogout(state) {
+    state.token = ''
+    state.menus = []
+    state.user = {}
+  },
   setCurrentUser(state, user) {
     state.user = user
   },
@@ -40,7 +45,7 @@ export const actions = {
     commit('setCurrentUser', data.user)
   },
   async menus({ commit }, params) {
-    const data = await request.get('/sys/menus')
+    const data = await request.get('/sys/navMenu')
     data && commit('setMenus', data.menus)
   },
   async hello() {

@@ -7,7 +7,8 @@
       <el-table-column prop="roleId" label="#" width="200"> </el-table-column>
       <el-table-column width="200" prop="roleName" label="名称">
       </el-table-column>
-      <el-table-column width="200" prop="type" label="描述"> </el-table-column>
+      <el-table-column width="200" prop="remark" label="描述">
+      </el-table-column>
       <el-table-column label="创建时间" prop="createTime"></el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">
@@ -40,6 +41,7 @@
           <el-cascader
             v-model="form.checkedKeys"
             style="width: 100%"
+            placeholder="选择权限"
             :options="menus"
             :props="{
               multiple: true,
@@ -52,6 +54,15 @@
             clearable
           ></el-cascader>
           <p class="tip">注：下级存在的情况下，必须选中上级.</p>
+          <el-form-item>
+            <el-button
+              :loading="dialog.loading"
+              type="primary"
+              @click="submitForm"
+              >提交</el-button
+            >
+            <el-button @click="dialog.visible = false">取消</el-button>
+          </el-form-item>
         </el-form-item>
       </el-form>
     </el-dialog>
@@ -66,7 +77,8 @@ export default {
     return {
       dialog: {
         visible: false,
-        title: '修改'
+        title: '修改',
+        loading: false
       },
       form: {
         checkedKeys: [],
@@ -89,7 +101,30 @@ export default {
   },
   created() {},
   methods: {
-    add() {},
+    add() {
+      this.form.checkedKeys = []
+      this.form.roleName = ''
+      this.form.remark = ''
+      this.dialog.title = '新增'
+      this.dialog.visible = true
+    },
+    async submitForm() {
+      const sysRole = {
+        roleName: this.form.roleName,
+        remark: this.form.remark,
+        menuIds: this.form.checkedKeys
+      }
+      this.dialog.loading = true
+      if (this.dialog.title === '新增') {
+        await request.post('/sys/role', sysRole)
+      } else {
+        sysRole.roleId = this.form.roleId
+        await request.put('/sys/role', sysRole)
+      }
+      this.dialog.loading = false
+      this.dialog.visible = false
+      this.$store.dispatch('system/roles')
+    },
     async modify(row) {
       const result = await request.get('/sys/role/menus', {
         params: { id: row.roleId }
@@ -100,7 +135,15 @@ export default {
       this.form.roleId = row.roleId
       this.dialog.visible = true
     },
-    del() {}
+    async del(row) {
+      await this.$confirm(`确定删除[id=${row.roleId}]角色?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      })
+      await request.delete('sys/role', { params: { id: row.roleId } })
+      this.$message('删除成功！')
+      this.$store.dispatch('system/roles')
+    }
   }
 }
 </script>
