@@ -1,54 +1,57 @@
-import request from '@/common/request'
-import { menusToTree } from '@/common/utils'
+import Menu from '~/common/shared/Menu'
 
-// 先获取本地是否有token，直接放到请求的header中
-if (sessionStorage.getItem('token')) {
-  request.defaults.headers.common.Authorization =
-    'Bearer ' + sessionStorage.getItem('token')
-}
-
-export const state = () => ({
+const state = () => ({
   token: '',
   user: {},
-  menus: []
+  menu: new Menu()
 })
 
-export const mutations = {
-  setToken(state, token) {
+const mutations = {
+  setToken (state, token) {
     state.token = token
-    sessionStorage.setItem('token', token)
-    request.defaults.headers.common.Authorization = 'Bearer ' + token
   },
-  setLogout(state) {
+  setLogout (state) {
     state.token = ''
     state.menus = []
     state.user = {}
   },
-  setCurrentUser(state, user) {
+  setCurrentUser (state, user) {
     state.user = user
   },
-  setMenus(state, menus) {
-    state.menus = menusToTree(menus)
+  setMenus (state, menus) {
+    state.menu.setChildren(menus)
+  },
+  setMenuActive (state, route) {
+    state.menu.setActive(route)
   }
 }
 
-export const actions = {
-  async login({ commit }, params) {
-    const data = await request.post('/auth/login', params)
-    data && commit('setToken', data.token)
+const actions = {
+  async login ({ commit }, params) {
+    const data = await this.$axios.post('/auth/_login', params)
+    if (data) {
+      this.$axios.setToken(data.token, 'Bearer')
+      sessionStorage.setItem('token', data.token)
+      commit('setToken', data.token)
+    }
   },
-  async logout() {
-    await request.get('/auth/logout')
+  async logout () {
+    await this.$axios.get('/auth/logout')
   },
-  async currentUser({ commit }) {
-    const data = await request.get('/sys/user')
+  async currentUser ({ commit }) {
+    const data = await this.$axios.get('/sys/user')
     commit('setCurrentUser', data.user)
   },
-  async menus({ commit }, params) {
-    const data = await request.get('/sys/navMenu')
-    data && commit('setMenus', data.menus)
+  async menus ({ commit }) {
+    const data = await this.$axios.get('/sys/navMenu')
+    data.menus && commit('setMenus', data.menus)
   },
-  async hello() {
-    await request.get('/sys/hello')
+  async hello () {
+    console.log(this.$axios.defaults)
+    await this.$axios.get('/sys/hello')
   }
+}
+
+export {
+  state, mutations, actions
 }

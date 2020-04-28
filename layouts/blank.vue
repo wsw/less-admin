@@ -1,5 +1,5 @@
 <template>
-  <div class="">
-    <nuxt></nuxt>
+  <div class="n-progress">
+    <nuxt />
   </div>
 </template>

@@ -13,7 +13,7 @@ import IconSvg from '@/components/icon-svg'
 Vue.component('IconSvg', IconSvg)
 
 // 导入多个文件
-const svgFiles = require.context('@/components/icon-svg/svg', true, /\.svg$/)
+const svgFiles = require.context('@/assets/svg', true, /\.svg$/)
 const iconList = svgFiles.keys().map(item => svgFiles(item))
 
 Vue.prototype.icons = iconList.map(item => item.default.id.replace('icon-', ''))

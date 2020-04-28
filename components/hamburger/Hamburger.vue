@@ -1,11 +1,9 @@
 <template>
-  <div
+  <i
     @click="toggleClick"
-    class="hamburger"
     :class="{ 'is-active': isActive }"
-  >
-    <i class="el-icon-s-operation"></i>
-  </div>
+    class="el-icon-s-operation"
+  />
 </template>
 
 <script>
@@ -18,30 +16,20 @@ export default {
     }
   },
   methods: {
-    toggleClick() {
+    toggleClick () {
       this.$emit('toggle')
     }
   }
 }
 </script>
 
-<style scoped>
-.hamburger {
-  display: inline-block;
-  margin-top: -5px;
-  vertical-align: middle;
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  transform: rotate(0deg);
-  transition: 0.38s;
-  transform-origin: 50% 50%;
-}
-
-.hamburger.is-active {
-  transform: rotate(90deg);
-}
+<style scoped lang="scss">
 .el-icon-s-operation {
-  color: white;
+  color: black;
+  transition: 0.38s;
+
+  &.is-active {
+    transform: rotate(90deg);
+  }
 }
 </style>

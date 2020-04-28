@@ -1,14 +1,16 @@
 <template>
   <div style="padding-top: 200px">
     <el-form label-position="left" label-width="0px" class="login-container">
-      <h3 class="title">系统登录</h3>
+      <h3 class="title">
+        系统登录
+      </h3>
       <el-form-item>
         <el-input
           v-model="username"
           type="text"
           auto-complete="off"
           placeholder="账号"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item>
         <el-input
@@ -16,36 +18,39 @@
           type="password"
           auto-complete="off"
           placeholder="密码"
-        ></el-input>
+        />
       </el-form-item>
       <el-form-item>
         <el-row :gutter="10">
-          <el-col :span="12"
-            ><el-input
+          <el-col
+            :span="12"
+          >
+            <el-input
               v-model="captcha"
               width="50%"
               type="text"
               auto-complete="off"
               placeholder="验证码"
-            ></el-input
-          ></el-col>
+            />
+          </el-col>
           <el-col :span="12">
             <img
-              style="height: 40px; width: 100%"
-              :src="'http://127.0.0.1:3000/auth/captcha.jpg?uuid=' + uuid"
+              :src="'http://127.0.0.1:3000/auth/_captcha.jpg?uuid=' + uuid"
               @click="reloadCaptcha"
-            />
+              style="height: 40px; width: 100%"
+            >
           </el-col>
         </el-row>
       </el-form-item>
       <!-- <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox> -->
       <el-form-item style="width:100%;">
         <el-button
+          @click.native.prevent="handleSubmit"
           type="primary"
           style="width:100%;"
-          @click.native.prevent="handleSubmit"
-          >登录</el-button
         >
+          登录
+        </el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -56,7 +61,7 @@ import { getUUID } from '~/common/utils'
 export default {
   name: 'Login',
   layout: 'blank',
-  data() {
+  data () {
     return {
       username: '',
       password: '',
@@ -65,25 +70,25 @@ export default {
     }
   },
   methods: {
-    handleSubmit() {
+    handleSubmit () {
       if (this.username && this.password && this.captcha) {
-        this.$store
-          .dispatch('login', {
-            username: this.username,
-            password: this.password,
-            code: this.captcha,
-            uuid: this.uuid
-          })
-          .then(success => {
-            if (this.$store.state.token) {
-              this.$router.push({ path: this.$route.query.url || '/' })
-            }
-          })
+        this.$store.dispatch('login', {
+          username: this.username,
+          password: this.password,
+          code: this.captcha,
+          uuid: this.uuid
+        }).then((success) => {
+          if (this.$store.state.token) {
+            this.$router.push({ path: this.$route.query.url || '/' })
+          }
+        }).catch(() => {
+          this.reloadCaptcha()
+        })
       } else {
         this.$message('信息不完整！')
       }
     },
-    reloadCaptcha() {
+    reloadCaptcha () {
       this.uuid = getUUID()
     }
   }

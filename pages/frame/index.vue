@@ -1,11 +1,11 @@
 <template>
-  <iframe class="frame" :src="url" frameborder="0"></iframe>
+  <iframe :src="url" class="frame" frameborder="0" />
 </template>
 
 <script>
 export default {
   name: 'Frame',
-  asyncData(context) {
+  asyncData (context) {
     return {
       url: context.query.url,
       title: context.params.title

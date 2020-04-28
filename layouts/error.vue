@@ -2,12 +2,21 @@
   <div class="error-container">
     <div class="error-container-wrapper">
       <div class="site-content">
-        <h2 class="not-found-title">{{ error.statusCode }}</h2>
-        <p v-if="error.msg" class="not-found-desc">{{ error.msg }} ...</p>
+        <h2 class="not-found-title">
+          {{ error.statusCode }}
+        </h2>
+        <p v-if="error.msg" class="not-found-desc">
+          {{ error.msg }} ...
+        </p>
         <p v-else class="not-found-desc">
           抱歉！您访问的页面<em>失联</em>啦 ...
         </p>
-        <nuxt-link to="/" class="not-found-btn-gohome">首 页</nuxt-link>
+        <nuxt-link to="/" class="not-found-btn-gohome">
+          首 页
+        </nuxt-link>
+        <nuxt-link to="/sys/user" class="not-found-btn-gohome">
+          user
+        </nuxt-link>
         <!-- <nuxt></nuxt> -->
       </div>
     </div>
@@ -27,14 +36,6 @@ export default {
 </script>
 
 <style scoped>
-/*.error-container {*/
-/*  position: absolute;*/
-/*  top: 0;*/
-/*  right: 0;*/
-/*  bottom: 0;*/
-/*  left: 0;*/
-/*  overflow: hidden;*/
-/*}*/
 .error-container .error-container-wrapper {
   padding: 0;
   margin: 0;

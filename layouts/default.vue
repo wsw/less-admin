@@ -2,39 +2,36 @@
   <el-container class="default-container">
     <el-header class="header" height="45px">
       Less快速开发框架
-      <el-dropdown class="user-info" @command="handleUserCommand">
+      <el-dropdown @command="handleUserCommand" class="user-info">
         <span class="el-dropdown-link">
-          {{ user.username }}<i class="el-icon-arrow-down el-icon--right"></i>
+          {{ user.username }}<i class="el-icon-arrow-down el-icon--right" />
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command="logout">登出</el-dropdown-item>
+          <el-dropdown-item command="logout">
+            登出
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-header>
-    <el-container class="main-container">
-      <el-aside class="aside" :width="collapse ? '65px' : '200px'">
+    <el-container class="main-container n-progress">
+      <el-aside :width="collapse ? '55px' : '200px'" class="aside">
         <el-menu
           :collapse="collapse"
           :collapse-transition="false"
-          background-color="#202b30"
-          text-color="#8a979e"
-          :router="true"
-          active-text-color="white"
-          :default-active="defaultIndex"
+          :default-active="menu.active + ''"
+          @select="select"
         >
-          <el-menu-item index="" :route="{ path: '/' }">
-            <i class="el-icon-s-grid"></i>
-            <span slot="title">首页</span>
-          </el-menu-item>
-          <template v-for="menu in menus">
-            <sub-menu :key="menu.menuId" :menu="menu"></sub-menu>
+          <template v-for="item in menu.children">
+            <sub-menu :key="item.menuId" :menu="item" />
           </template>
         </el-menu>
         <div class="aside-bottom">
-          <hamburger :is-active="collapse" @toggle="toggle"></hamburger>
+          <hamburger :is-active="collapse" @toggle="toggle" />
         </div>
       </el-aside>
-      <el-main class="main"><nuxt /></el-main>
+      <el-main class="main">
+        <nuxt />
+      </el-main>
     </el-container>
   </el-container>
 </template>
@@ -46,70 +43,87 @@ import SubMenu from '@/components/menu/SubMenu'
 export default {
   name: 'Default',
   components: { Hamburger, SubMenu },
-  data() {
-    const route = this.$route
+  data () {
     return {
-      collapse: false,
-      defaultIndex:
-        route.path === '/frame/'
-          ? `${route.path}?url=${route.query.url}`
-          : route.path
+      collapse: false
     }
   },
+  middleware: 'navigation',
   computed: {
-    menus() {
-      return this.$store.state.menus
+    menu () {
+      return this.$store.state.menu
     },
-    user() {
+    user () {
       return this.$store.state.user
     }
   },
-  async created() {
-    await this.$store.dispatch('currentUser')
+  async created () {
+    // await this.$store.dispatch('currentUser')
     await this.$store.dispatch('menus')
+    this.$store.commit('setMenuActive', this.$route)
   },
   methods: {
-    toggle() {
+    toggle () {
       this.collapse = !this.collapse
     },
-    handleUserCommand(command) {
+    handleUserCommand (command) {
       if (command === 'logout') {
         this.$store.dispatch('logout').then(() => {
           this.$router.push('/login')
         })
       }
+    },
+    select (index) {
+      const url = this.menu.map[index].url
+      this.$router.push({
+        path: url.includes('http') || url.includes('https')
+          ? `/frame/?url=${url}` : '/' + url
+      })
     }
   }
 }
 </script>
 
-<style scoped>
-.default-container,
-.main-container {
+<style scoped lang="scss">
+.default-container {
+  padding-top: 45px;
+  position: relative;
   height: 100%;
 }
 .main-container {
   background: #eceff1;
+  height: 100%;
 }
 .header {
   line-height: 45px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  background-color: #283EB2;
+  color: white;
 }
 .aside {
-  background: #202b30;
+  background: white;;
   position: relative;
   height: 100%;
   padding-bottom: 40px;
   width: 200px;
   transition: 0.5s;
+
+  .aside-bottom {
+    text-align: center;
+    position: absolute;
+    height: 39px;
+    border-top: 1px solid #EBEEF5;
+    line-height: 39px;
+    text-align: center;
+    width: 100%;
+  }
 }
 .main {
   height: 100%;
-}
-.aside-bottom {
-  text-align: center;
-  position: absolute;
-  bottom: 5px;
-  width: 100%;
+  padding: 0;
 }
 .user-info {
   float: right;
@@ -122,18 +136,21 @@ export default {
   font-size: 12px;
 }
 </style>
-<style>
-html,
-body,
-#__nuxt,
-#__layout {
-  height: 100%;
-  width: 100%;
-}
-.default-container .el-menu {
-  border: 0;
-  height: 100%;
-  overflow: auto;
+<style lang="scss">
+.default-container .aside {
+  border-right: 1px solid #EBEEF5;
+  .el-menu {
+    border: 0;
+    height: 100%;
+    overflow: auto;
+    .el-menu-item {
+      color: #666;
+      &.is-active, &:hover, &:focus {
+        background-color: #409eff;
+        color: white;
+      }
+    }
+  }
 }
 .default-container .box-card {
   height: 100%;
